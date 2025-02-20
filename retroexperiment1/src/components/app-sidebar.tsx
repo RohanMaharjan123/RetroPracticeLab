@@ -44,10 +44,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <button
+          
                     onClick={() => {
                       const event = new CustomEvent("toggleAddNoteForm")
                       window.dispatchEvent(event)
                     }}
+                    //  className="bg-gray-100"
                   >
                     Add Note
                   </button>
@@ -55,7 +57,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <button onClick={handleLogout} className="flex items-center">
+                  <button onClick={handleLogout} className="flex items-center ">
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
                   </button>
