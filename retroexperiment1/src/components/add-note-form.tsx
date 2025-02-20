@@ -26,18 +26,23 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote }: AddNoteFor
   const [task, setTask] = useState("")
   const [description, setDescription] = useState("")
 
+  // Get today's date in YYYY-MM-DD format for the min attribute
+  const today = new Date().toISOString().split("T")[0]
+
   useEffect(() => {
     if (editingNote) {
       setDate(editingNote.date)
       setTask(editingNote.task)
       setDescription(editingNote.description)
+    } else {
+      // Set the default date to today when adding a new note
+      setDate(today)
     }
-  }, [editingNote])
+  }, [editingNote, today])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    // API call 
     if (editingNote && onUpdateNote) {
       onUpdateNote({
         id: editingNote.id,
@@ -53,7 +58,7 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote }: AddNoteFor
       })
     }
 
-    setDate("")
+    setDate(today) // Reset to today's date after submission
     setTask("")
     setDescription("")
   }
@@ -67,6 +72,7 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote }: AddNoteFor
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
+          min={today} // Set the minimum date to today
           required
           className="mt-1.5"
         />
