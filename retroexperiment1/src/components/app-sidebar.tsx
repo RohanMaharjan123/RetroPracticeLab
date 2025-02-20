@@ -1,5 +1,7 @@
-import type * as React from "react"
+"use client"
 
+import type * as React from "react"
+import { useRouter } from "next/navigation"
 import { SearchForm } from "@/components/search-form"
 import {
   Sidebar,
@@ -13,8 +15,17 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { LogOut } from "lucide-react"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const router = useRouter()
+
+  const handleLogout = () => {
+    // Here you would typically clear any authentication tokens or user data
+    // For this example, we'll just redirect to the login page
+    router.push("/")
+  }
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -37,9 +48,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                       const event = new CustomEvent("toggleAddNoteForm")
                       window.dispatchEvent(event)
                     }}
-                    className="px-4 py-2 bg-neutral-500 text-white rounded-lg hover:bg-neutral-600"
                   >
                     Add Note
+                  </button>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <button onClick={handleLogout} className="flex items-center">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    Logout
                   </button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
