@@ -17,17 +17,15 @@ interface Note {
 
 interface AddNoteFormProps {
   onAddNote: (note: Omit<Note, "id">) => void
-  onUpdateNote?: (note: Note) => void
-  editingNote?: Note | null
+  onUpdateNote: (note: Note) => void
+  editingNote: Note | null
+  onCancel: () => void
 }
 
-export function AddNoteForm({ onAddNote, onUpdateNote, editingNote }: AddNoteFormProps) {
+export function AddNoteForm({ onAddNote, onUpdateNote, editingNote, onCancel }: AddNoteFormProps) {
   const [date, setDate] = useState("")
   const [task, setTask] = useState("")
   const [description, setDescription] = useState("")
-
-  // Get today's date in YYYY-MM-DD format for the min attribute
-  const today = new Date().toISOString().split("T")[0]
 
   useEffect(() => {
     if (editingNote) {
@@ -36,29 +34,29 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote }: AddNoteFor
       setDescription(editingNote.description)
     } else {
       // Set the default date to today when adding a new note
-      setDate(today)
+      setDate(new Date().toISOString().split("T")[0])
+      setTask("")
+      setDescription("")
     }
-  }, [editingNote, today])
+  }, [editingNote])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (editingNote && onUpdateNote) {
-      onUpdateNote({
-        id: editingNote.id,
-        date,
-        task,
-        description,
-      })
-    } else {
-      onAddNote({
-        date,
-        task,
-        description,
-      })
+    const noteData = {
+      date,
+      task,
+      description,
     }
 
-    setDate(today) // Reset to today's date after submission
+    if (editingNote) {
+      onUpdateNote({ ...noteData, id: editingNote.id })
+    } else {
+      onAddNote(noteData)
+    }
+
+    // Reset form
+    setDate(new Date().toISOString().split("T")[0])
     setTask("")
     setDescription("")
   }
@@ -72,7 +70,6 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote }: AddNoteFor
           type="date"
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          min={today} // Set the minimum date to today
           required
           className="mt-1.5"
         />
@@ -102,14 +99,7 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote }: AddNoteFor
         <Button type="submit" className="flex-1">
           {editingNote ? "Update Note" : "Add Note"}
         </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => {
-            const event = new CustomEvent("toggleAddNoteForm")
-            window.dispatchEvent(event)
-          }}
-        >
+        <Button type="button" variant="outline" onClick={onCancel}>
           Cancel
         </Button>
       </div>

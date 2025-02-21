@@ -56,12 +56,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton asChild>
+                {/* <SidebarMenuButton asChild>
                   <button onClick={handleLogout} className="flex items-center ">
                     <LogOut className="mr-2 h-4 w-4" />
                     Logout
                   </button>
-                </SidebarMenuButton>
+                </SidebarMenuButton> */}
               </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
