@@ -6,11 +6,14 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.authentication import JWTAuthentication
 import jwt
 from datetime import datetime, timedelta, timezone
-from .serializer import UserSerializer
 from .models import User
 from rest_framework.permissions import AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework import status
+from .models import Note
+from .serializers import NoteSerializer, UserSerializer
+from django.shortcuts import get_object_or_404
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -72,4 +75,50 @@ class LogoutView(APIView):
         }
         return response
     
-    
+class AddNoteView(APIView):
+    # permission_classes = [AllowAny]
+
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
+
+    def post(self, request):
+        print("I am inside add note view", request.data)
+        print("request.user", request.user)
+        
+        # Debugging: Check if the token is being received
+        auth_header = request.headers.get('Authorization')
+        print("Authorization header:", auth_header)
+        
+        serializer = NoteSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            serializer.save(user=request.user)  # Set the user field manually
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NotesView(APIView):
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
+
+    def get(self, request):
+        notes = Note.objects.filter(user=request.user)
+        serializer = NoteSerializer(notes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class NoteDetailView(APIView):
+    permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
+
+    def get_object(self, request, pk):
+        return get_object_or_404(Note, pk=pk, user=request.user)
+
+    def put(self, request, pk):
+        note = self.get_object(request, pk)
+        serializer = NoteSerializer(note, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        note = self.get_object(request, pk)
+        note.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

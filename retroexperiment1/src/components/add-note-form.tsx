@@ -26,6 +26,7 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote, onCancel }: 
   const [date, setDate] = useState("")
   const [task, setTask] = useState("")
   const [description, setDescription] = useState("")
+  console.log(date, task, description)
 
   useEffect(() => {
     if (editingNote) {
@@ -34,7 +35,7 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote, onCancel }: 
       setDescription(editingNote.description)
     } else {
       // Set the default date to today when adding a new note
-      setDate(new Date().toISOString().split("T")[0])
+      setDate("")
       setTask("")
       setDescription("")
     }
@@ -56,7 +57,7 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote, onCancel }: 
     }
 
     // Reset form
-    setDate(new Date().toISOString().split("T")[0])
+    setDate("")
     setTask("")
     setDescription("")
   }
@@ -68,6 +69,7 @@ export function AddNoteForm({ onAddNote, onUpdateNote, editingNote, onCancel }: 
         <Input
           id="date"
           type="date"
+          min={new Date().toISOString().split("T")[0]}
           value={date}
           onChange={(e) => setDate(e.target.value)}
           required

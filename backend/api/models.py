@@ -15,15 +15,14 @@ class User(AbstractUser):
     REQUIRED_FIELDS = []
 
 
-# class Note(models.Model):
-#     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notes')
-#     date = models.DateTimeField(default=timezone.now)
-#     task = models.CharField(max_length=255)
-#     description = models.TextField()
+class Note(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notes')
+    date = models.DateTimeField(default=timezone.now)
+    task = models.CharField(max_length=255)
+    description = models.TextField()
 
-#     def __str__(self):
-#         return self.task 
-
+    def __str__(self):
+        return self.task 
 
 
 

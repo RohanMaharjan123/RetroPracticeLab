@@ -43,7 +43,7 @@ export default function DashboardPage() {
     setError(null)
     try {
       const token = localStorage.getItem("accessToken")
-      const response = await axios.get(`${API_URL}/notes/`, {
+      const response = await axios.get(`${API_URL}/notes`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       setNotes(response.data)
@@ -58,9 +58,10 @@ export default function DashboardPage() {
   const handleAddNote = async (note: Omit<Note, "id">) => {
     try {
       const token = localStorage.getItem("accessToken")
-      const response = await axios.post(`${API_URL}/notes/`, note, {
+      const response = await axios.post(`${API_URL}/add-note`, note, {
         headers: { Authorization: `Bearer ${token}` },
       })
+      console.log("NABINAA",response.data)
       setNotes([...notes, response.data])
       setShowAddNoteForm(false)
     } catch (err) {
@@ -118,14 +119,14 @@ export default function DashboardPage() {
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4">
+        <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4 bg-gray-300">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Dashboard</BreadcrumbLink>
+                  <BreadcrumbLink href="#">Your Note</BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
@@ -138,7 +139,7 @@ export default function DashboardPage() {
             <AddNoteForm onAddNote={handleAddNote} onUpdateNote={handleUpdateNote} editingNote={editingNote} />
           ) : (
             <>
-              <Button onClick={() => setShowAddNoteForm(true)}>Add New Note</Button>
+              <Button onClick={() => setShowAddNoteForm(true)} className="px-1 py-0.5 text-xs">Add New Note</Button>
               <div className="grid gap-4 md:grid-cols-3">
                 {notes.map((note) => (
                   <div

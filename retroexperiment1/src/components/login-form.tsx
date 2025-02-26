@@ -42,7 +42,7 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="w-[350px] bg-gray-100">
+    <Card className="w-[350px] bg-gray-300">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription>Enter your credentials to access your account</CardDescription>

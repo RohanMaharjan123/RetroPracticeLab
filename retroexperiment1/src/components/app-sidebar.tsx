@@ -16,9 +16,10 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { LogOut } from "lucide-react"
+import { useState } from "react"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const router = useRouter()
+  const router = useRouter()  
 
   const handleLogout = () => {
     // Here you would typically clear any authentication tokens or user data
@@ -28,17 +29,18 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
+      <SidebarHeader className="bg-gray-300">
         <SearchForm />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="bg-gray-300">
         <SidebarGroup>
           <SidebarGroupLabel>Notes</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <button onClick={() => (window.location.href = "/dashboard")}>Dashboard</button>
+                  <button onClick={() => (window.location.href = "/dashboard" )} >
+                    Dashboard</button>
                 </SidebarMenuButton>
               </SidebarMenuItem>
               <SidebarMenuItem>
