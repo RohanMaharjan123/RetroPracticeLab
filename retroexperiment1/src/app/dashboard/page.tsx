@@ -89,7 +89,9 @@ export default function DashboardPage() {
       console.error(err)
     }
   }
-
+  const handleCancel = () => {
+    setEditingNote(null); // Reset editing state
+  };
   const handleDeleteNote = async (id: string) => {
     if (window.confirm("Are you sure you want to delete this note?")) {
       try {
@@ -126,17 +128,22 @@ export default function DashboardPage() {
             <Breadcrumb>
               <BreadcrumbList>
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="#">Your Note</BreadcrumbLink>
+                  <BreadcrumbLink href="/dashboard">Your Note</BreadcrumbLink>
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
           </div>
           <Button onClick={handleLogout}>Logout</Button>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4">
+        <div className="">
           {error && <p className="text-red-500">{error}</p>}
           {showAddNoteForm ? (
-            <AddNoteForm onAddNote={handleAddNote} onUpdateNote={handleUpdateNote} editingNote={editingNote} />
+            <AddNoteForm 
+            onAddNote={handleAddNote} 
+            onUpdateNote={handleUpdateNote} 
+            editingNote={editingNote} 
+            onCancel={handleCancel} 
+            />
           ) : (
             <>
               <Button onClick={() => setShowAddNoteForm(true)} className="px-1 py-0.5 text-xs">Add New Note</Button>
